@@ -1,16 +1,35 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useCallback } from "react";
+import SplashScreen from "@/components/SplashScreen";
+import Onboarding, { type OnboardingData } from "@/components/Onboarding";
+import BottomNav, { type TabId } from "@/components/BottomNav";
+import HomeDashboard from "@/components/HomeDashboard";
+import WorkoutPage from "@/components/WorkoutPage";
+import TrackerPage from "@/components/TrackerPage";
+import NutritionPage from "@/components/NutritionPage";
+import ProfilePage from "@/components/ProfilePage";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const [phase, setPhase] = useState<"splash" | "onboarding" | "app">("splash");
+  const [activeTab, setActiveTab] = useState<TabId>("home");
+
+  const handleSplashComplete = useCallback(() => setPhase("onboarding"), []);
+  const handleOnboardingComplete = useCallback((_data: OnboardingData) => {
+    setPhase("app");
+  }, []);
+
+  if (phase === "splash") return <SplashScreen onComplete={handleSplashComplete} />;
+  if (phase === "onboarding") return <Onboarding onComplete={handleOnboardingComplete} />;
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background">
+      {activeTab === "home" && <HomeDashboard />}
+      {activeTab === "workout" && <WorkoutPage />}
+      {activeTab === "tracker" && <TrackerPage />}
+      {activeTab === "nutrition" && <NutritionPage />}
+      {activeTab === "profile" && <ProfilePage />}
+      <BottomNav active={activeTab} onChange={setActiveTab} />
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
