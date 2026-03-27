@@ -15,8 +15,8 @@ const LoginScreen = ({ onComplete }: LoginScreenProps) => {
 
   return (
     <div className="fixed inset-0 flex flex-col items-center bg-background px-6 pt-16 pb-8">
-      <img src={logo} alt="QuickHelp" width={56} height={56} className="rounded-xl" />
-      <h1 className="mt-4 font-display text-2xl font-bold text-foreground">Welcome to QuickHelp</h1>
+      <img src={logo} alt="Meido" width={56} height={56} className="rounded-xl" />
+      <h1 className="mt-4 font-display text-2xl font-bold text-foreground">Welcome to Meido</h1>
       <p className="mt-1 text-sm text-muted-foreground">Quick help, anytime nearby</p>
 
       <div className="mt-10 w-full max-w-sm">
