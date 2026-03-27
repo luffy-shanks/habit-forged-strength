@@ -66,7 +66,7 @@ const HomeDashboard = () => {
   return (
     <div className="pb-24">
       <div className="bg-primary px-5 pt-12 pb-6 rounded-b-3xl">
-        <button className="flex items-center gap-2 text-primary-foreground/80 text-sm mb-4">
+        <button onClick={detectLocation} className="flex items-center gap-2 text-primary-foreground/80 text-sm mb-4">
           {locating ? <Loader2 className="h-4 w-4 animate-spin" /> : <MapPin className="h-4 w-4" />}
           <span>{location}</span>
           <ChevronRight className="h-3 w-3" />
