@@ -21,15 +21,16 @@ const workers = [
 
 const HomeDashboard = () => {
   const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [location, setLocation] = useState<string>("Detecting location...");
-  const [locating, setLocating] = useState(true);
+  const [location, setLocation] = useState<string>("Tap to detect location");
+  const [locating, setLocating] = useState(false);
 
-  useEffect(() => {
+  const detectLocation = () => {
     if (!navigator.geolocation) {
       setLocation("Location unavailable");
-      setLocating(false);
       return;
     }
+    setLocating(true);
+    setLocation("Detecting location...");
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         try {
@@ -45,12 +46,17 @@ const HomeDashboard = () => {
         }
         setLocating(false);
       },
-      () => {
+      (err) => {
+        console.error("Geolocation error:", err.message);
         setLocation("Bengaluru, Karnataka");
         setLocating(false);
       },
-      { timeout: 5000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
+  };
+
+  useEffect(() => {
+    detectLocation();
   }, []);
 
   if (selectedService) {
