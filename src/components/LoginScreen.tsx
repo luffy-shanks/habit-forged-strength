@@ -60,7 +60,7 @@ const LoginScreen = ({ onComplete }: LoginScreenProps) => {
 
         {phase === "role" && (
           <div className="space-y-4 animate-fade-up">
-            <h2 className="text-lg font-display font-bold text-foreground text-center">How will you use QuickHelp?</h2>
+            <h2 className="text-lg font-display font-bold text-foreground text-center">How will you use Meido?</h2>
             <button
               onClick={() => onComplete("customer")}
               className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-border hover:border-primary bg-card shadow-card hover:shadow-card-hover transition-all"
