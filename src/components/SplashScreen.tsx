@@ -16,9 +16,9 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
 
   return (
     <div className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-primary transition-opacity duration-400 ${fadeOut ? "opacity-0" : "opacity-100"}`}>
-      <img src={logo} alt="QuickHelp" width={80} height={80} className="rounded-2xl shadow-lg" />
+      <img src={logo} alt="Meido" width={80} height={80} className="rounded-2xl shadow-lg" />
       <h1 className="mt-5 font-display text-3xl font-bold text-primary-foreground">
-        QuickHelp
+        Meido
       </h1>
       <p className="mt-2 text-sm text-primary-foreground/70 tracking-wide">
         Quick help, anytime nearby
