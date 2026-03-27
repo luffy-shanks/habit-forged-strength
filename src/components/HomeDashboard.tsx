@@ -1,103 +1,105 @@
-import { Footprints, Flame, Timer, Droplets, Play, Plus, TrendingUp, GlassWater } from "lucide-react";
+import { useState } from "react";
+import { MapPin, Search, Star, BadgeCheck, Clock, ChevronRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import ServiceDetailPage from "./ServiceDetailPage";
 
-const stats = [
-  { label: "Steps", value: "6,234", target: "10,000", icon: Footprints, color: "text-primary" },
-  { label: "Calories", value: "420", target: "600 kcal", icon: Flame, color: "text-destructive" },
-  { label: "Workout", value: "32", target: "45 min", icon: Timer, color: "text-secondary" },
-  { label: "Water", value: "1.5", target: "3.0 L", icon: Droplets, color: "text-primary" },
+const services = [
+  { id: "cleaning", emoji: "🧹", label: "Cleaning" },
+  { id: "plumbing", emoji: "🔧", label: "Plumbing" },
+  { id: "electric", emoji: "⚡", label: "Electrical" },
+  { id: "utensils", emoji: "🍳", label: "Utensils" },
+  { id: "painting", emoji: "🎨", label: "Painting" },
+  { id: "quickhelp", emoji: "🚀", label: "Quick Help" },
 ];
 
-const quickActions = [
-  { label: "Start Workout", icon: Play, accent: true },
-  { label: "Log Meal", icon: Plus, accent: false },
-  { label: "Add Water", icon: GlassWater, accent: false },
-  { label: "View Progress", icon: TrendingUp, accent: false },
+const workers = [
+  { id: 1, name: "Ramesh K.", service: "Plumbing", rating: 4.8, reviews: 124, distance: "0.8 km", available: true, price: "₹299" },
+  { id: 2, name: "Priya S.", service: "Cleaning", rating: 4.9, reviews: 89, distance: "1.2 km", available: true, price: "₹249" },
+  { id: 3, name: "Arun M.", service: "Electrical", rating: 4.7, reviews: 67, distance: "2.1 km", available: false, price: "₹349" },
+  { id: 4, name: "Meena R.", service: "Cleaning", rating: 4.6, reviews: 45, distance: "0.5 km", available: true, price: "₹199" },
 ];
 
 const HomeDashboard = () => {
-  const progress = 68;
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+
+  if (selectedService) {
+    return <ServiceDetailPage serviceId={selectedService} onBack={() => setSelectedService(null)} />;
+  }
 
   return (
-    <div className="pb-24 px-4 pt-6 max-w-lg mx-auto">
-      {/* Greeting */}
-      <div className="mb-6">
-        <p className="text-muted-foreground text-sm">
-          {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-        </p>
-        <h1 className="font-display text-2xl font-bold text-foreground">Hey Warrior 👋</h1>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-none">
-        {stats.map(s => {
-          const Icon = s.icon;
-          return (
-            <div key={s.label} className="glass-card min-w-[140px] p-4 flex-shrink-0">
-              <Icon className={`h-5 w-5 ${s.color} mb-2`} />
-              <p className="font-display text-xl font-bold text-foreground">{s.value}</p>
-              <p className="text-xs text-muted-foreground">{s.target}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Progress Ring */}
-      <div className="glass-card p-6 mt-4 flex items-center gap-6">
-        <div className="relative h-24 w-24 flex-shrink-0">
-          <svg className="h-24 w-24 -rotate-90" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(var(--muted))" strokeWidth="8" />
-            <circle
-              cx="50" cy="50" r="45" fill="none"
-              stroke="url(#progressGrad)" strokeWidth="8" strokeLinecap="round"
-              strokeDasharray={`${progress * 2.83} 283`}
-              style={{ transition: "stroke-dasharray 1s ease" }}
-            />
-            <defs>
-              <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="hsl(217 91% 60%)" />
-                <stop offset="100%" stopColor="hsl(142 71% 45%)" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <span className="absolute inset-0 flex items-center justify-center font-display text-lg font-bold text-foreground">
-            {progress}%
-          </span>
+    <div className="pb-24">
+      <div className="bg-primary px-5 pt-12 pb-6 rounded-b-3xl">
+        <div className="flex items-center gap-2 text-primary-foreground/80 text-sm mb-4">
+          <MapPin className="h-4 w-4" />
+          <span>Bengaluru, Karnataka</span>
         </div>
-        <div>
-          <h3 className="font-display font-semibold text-foreground">Daily Goal</h3>
-          <p className="text-sm text-muted-foreground mt-1">You're doing great! Keep pushing to hit your targets today.</p>
+        <h1 className="font-display text-xl font-bold text-primary-foreground">
+          What do you need help with?
+        </h1>
+        <div className="relative mt-4">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input placeholder="Search for a service..." className="pl-10 h-11 rounded-xl bg-card border-0 text-foreground" />
         </div>
       </div>
 
-      {/* Today's Workout */}
-      <div className="glass-card p-5 mt-4">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-display font-semibold text-foreground">Today's Workout</h3>
-          <span className="text-xs text-secondary font-medium bg-secondary/10 px-2 py-1 rounded-full">Recommended</span>
-        </div>
-        <p className="text-sm text-muted-foreground mb-4">Upper Body Strength • 35 min • 280 kcal</p>
-        <button className="w-full h-12 rounded-xl gradient-accent text-primary-foreground font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
-          <Play className="h-5 w-5" />
-          Start Now
-        </button>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="grid grid-cols-2 gap-3 mt-4">
-        {quickActions.map(a => {
-          const Icon = a.icon;
-          return (
+      <div className="px-5 mt-6">
+        <h2 className="font-display font-bold text-foreground mb-3">Services</h2>
+        <div className="grid grid-cols-3 gap-3">
+          {services.map(s => (
             <button
-              key={a.label}
-              className={`glass-card p-4 flex items-center gap-3 transition-all hover:border-primary/30 ${a.accent ? "border-primary/20" : ""}`}
+              key={s.id}
+              onClick={() => setSelectedService(s.id)}
+              className="flex flex-col items-center gap-2 p-4 rounded-xl bg-card shadow-card hover:shadow-card-hover transition-all"
             >
-              <div className={`rounded-lg p-2 ${a.accent ? "gradient-accent" : "bg-muted"}`}>
-                <Icon className={`h-4 w-4 ${a.accent ? "text-primary-foreground" : "text-muted-foreground"}`} />
-              </div>
-              <span className="text-sm font-medium text-foreground">{a.label}</span>
+              <span className="text-2xl">{s.emoji}</span>
+              <span className="text-xs font-medium text-foreground">{s.label}</span>
             </button>
-          );
-        })}
+          ))}
+        </div>
+      </div>
+
+      <div className="px-5 mt-8">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-display font-bold text-foreground">Nearby Workers</h2>
+          <button className="text-xs text-primary font-medium flex items-center gap-0.5">
+            See all <ChevronRight className="h-3 w-3" />
+          </button>
+        </div>
+        <div className="space-y-3">
+          {workers.map(w => (
+            <button
+              key={w.id}
+              onClick={() => setSelectedService(w.service.toLowerCase())}
+              className="w-full flex items-center gap-3 p-3 rounded-xl bg-card shadow-card hover:shadow-card-hover transition-all text-left"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted font-display font-bold text-primary text-lg">
+                {w.name.charAt(0)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-semibold text-sm text-foreground">{w.name}</span>
+                  <BadgeCheck className="h-3.5 w-3.5 text-primary" />
+                </div>
+                <p className="text-xs text-muted-foreground">{w.service} · {w.distance}</p>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <Star className="h-3 w-3 fill-accent text-accent" />
+                  <span className="text-xs font-medium text-foreground">{w.rating}</span>
+                  <span className="text-xs text-muted-foreground">({w.reviews})</span>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="font-display font-bold text-foreground">{w.price}</p>
+                {w.available ? (
+                  <span className="flex items-center gap-1 text-[10px] font-medium text-secondary">
+                    <Clock className="h-3 w-3" /> 15 min
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-muted-foreground">Busy</span>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
