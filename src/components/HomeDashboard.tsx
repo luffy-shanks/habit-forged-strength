@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { MapPin, Search, Star, BadgeCheck, Clock, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { MapPin, Search, Star, BadgeCheck, Clock, ChevronRight, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import ServiceDetailPage from "./ServiceDetailPage";
 
@@ -21,6 +21,37 @@ const workers = [
 
 const HomeDashboard = () => {
   const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [location, setLocation] = useState<string>("Detecting location...");
+  const [locating, setLocating] = useState(true);
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setLocation("Location unavailable");
+      setLocating(false);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`
+          );
+          const data = await res.json();
+          const city = data.address?.city || data.address?.town || data.address?.village || "Your Area";
+          const state = data.address?.state || "";
+          setLocation(`${city}${state ? ", " + state : ""}`);
+        } catch {
+          setLocation("Location detected");
+        }
+        setLocating(false);
+      },
+      () => {
+        setLocation("Bengaluru, Karnataka");
+        setLocating(false);
+      },
+      { timeout: 5000 }
+    );
+  }, []);
 
   if (selectedService) {
     return <ServiceDetailPage serviceId={selectedService} onBack={() => setSelectedService(null)} />;
@@ -29,10 +60,11 @@ const HomeDashboard = () => {
   return (
     <div className="pb-24">
       <div className="bg-primary px-5 pt-12 pb-6 rounded-b-3xl">
-        <div className="flex items-center gap-2 text-primary-foreground/80 text-sm mb-4">
-          <MapPin className="h-4 w-4" />
-          <span>Bengaluru, Karnataka</span>
-        </div>
+        <button className="flex items-center gap-2 text-primary-foreground/80 text-sm mb-4">
+          {locating ? <Loader2 className="h-4 w-4 animate-spin" /> : <MapPin className="h-4 w-4" />}
+          <span>{location}</span>
+          <ChevronRight className="h-3 w-3" />
+        </button>
         <h1 className="font-display text-xl font-bold text-primary-foreground">
           What do you need help with?
         </h1>
